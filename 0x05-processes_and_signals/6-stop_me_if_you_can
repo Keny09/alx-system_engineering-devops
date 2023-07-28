@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Check if the process is running
+if ps aux | grep -v grep | grep "4-to_infinity_and_beyond" > /dev/null; then
+    # Get the PID of the process
+    pid=$(ps aux | grep -v grep | grep "4-to_infinity_and_beyond" | awk '{print $2}')
+
+    # Terminate the process using the PID
+    if kill -TERM "$pid"; then
+        echo "Process 4-to_infinity_and_beyond (PID: $pid) has been stopped."
+    else
+        echo "Failed to stop process 4-to_infinity_and_beyond."
+    fi
+else
+    echo "Process 4-to_infinity_and_beyond is not running."
+fi
