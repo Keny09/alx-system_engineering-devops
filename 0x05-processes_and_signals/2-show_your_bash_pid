@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2009
+# Get a list of all processes
+processes=$(ps aux)
+# Filter the list to only show processes that contain the word "bash"
+filtered_processes=$(echo "$processes" | grep "bash")
+# Display the list of processes
+echo "$filtered_processes"
