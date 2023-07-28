@@ -6,9 +6,7 @@ processes=$(ps aux)
 filtered_processes=$(echo "$processes" | grep -v grep)
 
 # Display the list of processes in a user-oriented format
-echo "Here is a list of all currently running processes:"
 echo "$filtered_processes"
 
 # Show the process hierarchy
-echo "Here is the process hierarchy:"
 pstree "$filtered_processes"
