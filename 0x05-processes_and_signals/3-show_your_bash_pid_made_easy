@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Get a list of all processes
+processes=$(jobs -l
+
+# Filter the list to only show processes whose name contain the word bash
+filtered_processes=$(echo "$processes" | grep "bash")
+# Display the list of processes
+echo "PID | Process Name"
+echo "$filtered_processes"
