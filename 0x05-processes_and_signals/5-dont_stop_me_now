@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Get the PID of the process
-pid=$(pgrep 4-to_infinity_and_beyond)
-# Kill the process
-kill "$pid"
+# Kills the 4-to_infinity_and_beyond processi.
+
+kill "$(pgrep -f 4-to_infinity_and_beyond)"
