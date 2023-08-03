@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Function to get the process name associated with a PID
+get_process_name() {
+	local pid=$1
+	local name=$(ps -p "$pid" -o comm= 2>/dev/null)
+	echo "$name"
+}
+
+# Get the listening ports using netstat and filter only TCP and UDP
+listening_ports=$(netstat -tuln | grep -E '^(tcp|udp)' | awk '{print $4}' | cut -d ':' -f 2)
+
+# Loop through each listening port
+for port in $listening_ports; do
+	# Get the PID associated with the port using lsof
+	pid=$(lsof -i ":$port" -t)
+
+	# Get the process name from the PID
+	process_name=$(get_process_name "$pid")
+
+	# Display the listening port, PID, and process name
+	echo "Port: $port, PID: $pid, Process: $process_name"
+done
