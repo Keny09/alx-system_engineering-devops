@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Function to handle the incoming data
+handle_data() {
+	while IFS= read -r line; do
+		echo "$line"
+	done
+}
+
+# Create a named pipe (FIFO) to receive data
+fifo="/tmp/pipe_100"
+if [[ ! -p "$fifo" ]]; then
+	mkfifo "$fifo"
+fi
+
+# Listen on port 98 and redirect data to the named pipe
+nc -l -p 98 < "$fifo" | handle_data
+
+# Remove the named pipe when done
+rm "$fifo"
