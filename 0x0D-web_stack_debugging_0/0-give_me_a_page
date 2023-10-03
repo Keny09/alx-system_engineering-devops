@@ -1,17 +1,12 @@
 #!/usr/bin/env bash
+# This script starts Apache in a Docker container and sets the ServerName directive
 
-# Start Apache service
-service apache2 start
 
-# Create a directory for the HTML file
-mkdir -p /var/www/html
 
-# Create the HTML file with the desired content
-echo "Hello Holberton" > /var/www/html/index.html
+# Connect to the Docker container and run the commands
+    # Add ServerName directive to Apache configuration
+    echo 'ServerName localhost' >> /etc/apache2/apache2.conf
 
-# Ensure that Apache is running and accepting connections
-service apache2 status
-
-# Keep the container running
-tail -f /dev/null
-
+    # Start Apache
+    service apache2 restart
+   
