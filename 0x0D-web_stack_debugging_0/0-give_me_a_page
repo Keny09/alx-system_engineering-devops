@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Start Apache service
+service apache2 start
+
+# Create a directory for the HTML file
+mkdir -p /var/www/html
+
+# Create the HTML file with the desired content
+echo "Hello Holberton" > /var/www/html/index.html
+
+# Ensure that Apache is running and accepting connections
+service apache2 status
+
+# Keep the container running
+tail -f /dev/null
+
