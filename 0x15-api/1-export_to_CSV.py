@@ -1,36 +1,36 @@
 #!/usr/bin/python3
-"""a module that request data and save in json format"""
-import csv
-import json
-import requests
-from sys import argv
+"""A script that uses api to store information
+in a csv file"""
 
+if __name__ == '__main__':
+    import requests
+    import sys
+    import csv
 
-if __name__ == "__main__":
-    if argv[1] is None or type(int(argv[1])) is not int:
-        exit()
-    filename = argv[1] + ".json"
-    url = "https://jsonplaceholder.typicode.com"
-    try:
-        res_user = requests.get(url + "/users/" + argv[1])
-        user = res_user.json()
-    except:
-        exit()
-    try:
-        res_todo = requests.get(url + "/todos")
-        things = res_todo.json()
-    except:
-        exit()
-    row = {}
-    with open(filename, "w") as f:
-        json_list = []
-        for thing in things:
-            row_dict = {}
-            if thing.get("userId", None) == int(argv[1]):
-                row_dict["task"] = thing.get("title", None)
-                row_dict["completed"] = thing.get("completed", None)
-                row_dict["username"] = user.get("username", None)
-                json_list.append(row_dict)
-        row[str(argv[1])] = json_list
-        json.dumps(row)
-        f.write(str(row))
+    api_todo = 'https://jsonplaceholder.typicode.com/todos'
+    api_user = 'https://jsonplaceholder.typicode.com/users'
+    user = int(sys.argv[1])
+    value_todo = {'userId': user}
+    value_user = {'id': user}
+    filename = f'{str(user)}.csv'
+
+    r_todo = requests.get(api_todo, params=value_todo)
+    r_user = requests.get(api_user, params=value_user)
+
+    todo_list = r_todo.json()
+    user_list = r_user.json()
+
+    tasks = ''
+    number_of_tasks = len(todo_list)
+    completed_task = 0
+    username = user_list[0].get('username')
+
+    with open(filename, mode='w', newline='') as newfile:
+        writer = csv.writer(newfile, quoting=csv.QUOTE_ALL)
+        for data in todo_list:
+            csv_arr = []
+            csv_arr.append(user)
+            csv_arr.append(username)
+            csv_arr.append(data.get('completed'))
+            csv_arr.append(data.get('title'))
+            writer.writerow(csv_arr)
