@@ -1,35 +1,33 @@
 #!/usr/bin/python3
-"""a module that request data via REST API service"""
-import requests
-from sys import argv
+"""A script that uses api to print the required employee
+information in a well formatted way"""
 
+if __name__ == '__main__':
+    import requests
+    import sys
 
-if __name__ == "__main__":
-    if argv[1] is None or type(int(argv[1])) is not int:
-        exit()
-    url = "https://jsonplaceholder.typicode.com"
-    try:
-        res_user = requests.get(url + "/users/" + argv[1])
-        user = res_user.json()
-    except:
-        exit()
-    try:
-        res_todo = requests.get(url + "/todos")
-        things = res_todo.json()
-    except:
-        exit()
-    EMPLOYEE_NAME = user.get("name", None)
-    NUMBER_OF_DONE_TASKS = 0
-    TOTAL_NUMBER_OF_TASKS = 0
-    TASK_TITLE = []
+    api_todo = 'https://jsonplaceholder.typicode.com/todos'
+    api_user = 'https://jsonplaceholder.typicode.com/users'
+    user = int(sys.argv[1])
+    value_todo = {'userId': user}
+    value_user = {'id': user}
 
-    for thing in things:
-        if thing.get("userId", None) == int(argv[1]):
-            TOTAL_NUMBER_OF_TASKS += 1
-            if thing.get("completed", None) is True:
-                NUMBER_OF_DONE_TASKS += 1
-                TASK_TITLE.append(thing.get("title", None))
-    print("Employee {} is done with tasks({}/{}):"
-          .format(EMPLOYEE_NAME, NUMBER_OF_DONE_TASKS, TOTAL_NUMBER_OF_TASKS))
-    for task in TASK_TITLE:
-        print("\t{}".format(task))
+    r_todo = requests.get(api_todo, params=value_todo)
+    r_user = requests.get(api_user, params=value_user)
+
+    todo_list = r_todo.json()
+    user_list = r_user.json()
+
+    tasks = ''
+    number_of_tasks = len(todo_list)
+    completed_task = 0
+    name = user_list[0].get('name')
+
+    for i in range(number_of_tasks):
+        if todo_list[i].get('completed'):
+            completed_task += 1
+            tasks += '\t ' + todo_list[i].get('title') + '\n'
+
+    text = 'Employee {} is done with tasks({}/{}):'
+    print(text.format(name, completed_task, number_of_tasks))
+    print(tasks, end='')
